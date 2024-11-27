@@ -32,14 +32,14 @@ function NewsBlog(){
                 news.map((item, index)=>{
                     return (
                         <div className='post-list'>
-                            <h4 onClick={()=>{
+                            <h4 onClick={() => {
                                 setModalFlag(!modalFlag);
-                            }}>{news[index]}
-                                <span onClick={()=>{
-                                    let temp = [...count];
-                                    temp[index] += 1;
-                                    setCount(temp);
-                                }}> ❤</span>{count[index]}</h4>
+                            }}>{news[index]} <span onClick={(event) => {
+                                event.stopPropagation(); //이벤트 추가 전달 stop
+                                let temp = [...likeCount];
+                                temp[index]++;
+                                setLikeCount(temp);
+                            }}>❤</span> {likeCount[index]} </h4>
                             <p>내용 무</p>
                         </div>
                     )
