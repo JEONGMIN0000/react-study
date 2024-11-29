@@ -1,56 +1,61 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { useParams } from "react-router-dom"; //파라미터값 읽어오기
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import './Detail.css';
 
-
 function Detail({ foods }) {
 
-    // let {index} = useParams();
+    //let { index } = useParams(); 
     let { id } = useParams();
 
-    let [orderCount, setOrdercount] = useState(0);
+    let [orderCount, setOrderCount] = useState(0);
     const [smShow, setSmShow] = useState(false);
 
+        
     let [viewStatus, setViewStatus] = useState('');
+    
 
-    //foods 안에 id가 파라미터로 넘어온 id랑 같은! 데이터 찾깅!
-    let food = foods.find((item) => { return item.id == id; });
+    //fd002
 
-    useEffect(() => {
+    // foods 안에 id 가   파라미터로 넘어온 id랑 같은!! 데이터 찾기!!
+    let food = foods.find((item) => {
+        return item.id == id;
+    });
 
-        setTimeout(() => {
-            setViewStatus('end'); // 페이지 열었을 때 한번 실행
-        }, 300)
+    // let index = foods.findIndex((item)=>{
+    //     return item.id == id;
+    // });
+    useEffect(()=>{
 
-        //setViewStatus('end'); // 페이지 열었을 때 한번 실행 + css에서 transition duration/delay 조절
+        setTimeout(()=>{
+            setViewStatus('end');
+        }, 300);
 
     }, []);
 
-
     //useEffect(실행할 함수, 의존성 배열)
-    //useEffect(실행할 함수{ return ()={ clean up function }, 의존성 배열 )
+    //useEffect(실행할 함수{ return ()={clean up function}, 의존성 배열)
     useEffect(() => {
         console.log('useEffect [] 실행');
-    }, []); //의존성 배열 비어있음 -> 로딩(mount)
+    }, [])  //의존성 배열 비어있음 -> 로딩(mount)
 
     useEffect(() => {
         console.log('useEffect 실행');
-    }); //의존성 배열 X -> 로딩(mount), 업데이트
+    });  //의존성 배열X -> 로딩(mount), 업데이트
 
     useEffect(() => {
         console.log('useEffect [orderCount] 실행');
 
-        return () => { //clean up function
-            console.log('useEffect [orderCount] return 실행');
+        return () => {  //clean up function
+            console.log("useEffect [orderCount] return 실행");
         };
     }, [orderCount]);
 
-    useEffect(() => {
-        //2초후 smShow 값을 false 변경
-        let tmout = setTimeout(() => {
-            setSmShow(false);
+    useEffect(()=>{
+        //2초후 smShow 값을 false 변경        
+        let tmout = setTimeout(()=>{
+            setSmShow(false); //true -> false
         }, 2000); //ms 시간이 지난 뒤에 함수 실행
 
         //setTimeout
@@ -58,44 +63,50 @@ function Detail({ foods }) {
         //비동기 처리
 
         //clearTimeout
-        //clearinterval
-
-        return () => {//clean up function
+        //clearInterval
+        return ()=>{
             clearTimeout(tmout);
         }
 
-    }, []);
+    }, [])
 
     const redTextStyle = {
-        color: 'red'
+        color: "red"
     };
 
     const blueTextStyle = {
-        color: 'blue'
+        color: "blue"
     };
 
     const styles = {
-        redStyle: {
+        redStyle : {   //styles.redStyle
             color: "red"
         },
-        blueStyle: {
-            color: "blue"
+        blueStyle : {  //styles.blueStyle
+            color:"blue"
         },
-        fontBigBold: {
-            fontSize: "2rem",
-            fontWeight: "bold"
+        fontBigBold : {  //styles.fontBigBold
+            fontSize:"2rem",
+            fontWeight:"bold"
         }
-        //key : {}
     };
 
+    
+
+
+    // detail/2   
+    //       2 : index 
+    // foods[index] 
+
+    // let [cnt, setCnt] = useState(0);
 
     if (food == undefined || food == null) {
         return (
-            <div><h1>잘못된 접근</h1></div>
+            <div><h1>잘못된 접근입니다.</h1></div>
         )
     }
 
-    /*
+     /*
         조건에 따라 다른 스타일 적용
             가격 표시
                 1만원 이상 -> 빨간색
@@ -162,26 +173,24 @@ function Detail({ foods }) {
             <Container className={"start " + viewStatus}>
 
     */
-
-
     const priceClass = food.price >= 10000 ? 'price-red' : 'price-blue';
 
     const priceTextStyle = {
         color: food.price >= 10000 ? 'red' : 'blue'
     }
 
-    const priceTextStyleFunc = (price) => {
-        //1
-        if (price >= 10000) {
-            return { color: 'red' };
+    const priceTextStyleFunc = (price)=>{
+        
+        if(price >= 10000){
+            return { color : 'red' };
         } else {
-            return { color: 'blue' };
+            return { color : 'blue' };
         }
 
-        //2
-        // return color : price>= 10000 ? 'red' : 'blue';
+        // return {
+        //     color: price >= 10000 ? 'red' : 'blue'
+        // }
     }
-
 
 
     return (
@@ -192,20 +201,21 @@ function Detail({ foods }) {
                 </Col>
                 <Col md={6}>
                     <h4 style={{ paddingTop: '30px' }}>{food.title}</h4>
-                    <p style={styles.blueStyle}>{food.content}</p>{/* <p style={redTextStyle}>{food.content}</p> */}
-                    <p className={'text-strong' + priceClass}>{food.price}</p>
-                    <p>
+                    <p style={styles.blueStyle}>{food.content}</p>
+                    <p className={'text-strong ' + priceClass}>{food.price}</p>
+                    <p>+
                         <Button variant="dark" onClick={() => {
                             if (orderCount > 0)
-                                setOrdercount(orderCount - 1)
+                                setOrderCount(orderCount - 1);
                         }}>-</Button>
                         <span> {orderCount} </span>
                         <Button variant="dark" onClick={() => {
-                            setOrdercount(orderCount + 1)
+                            setOrderCount(orderCount + 1);
                         }}>+</Button>
                     </p>
 
                     <Button variant="primary">주문하기</Button>
+                    {/* <button onClick={()=>{setCnt(cnt+1)}}>버튼</button> */}
                 </Col>
             </Row>
 
@@ -213,7 +223,8 @@ function Detail({ foods }) {
                 size="sm"
                 show={smShow}
                 onHide={() => setSmShow(false)}
-                aria-labelledby="example-modal-sizes-title-sm">
+                aria-labelledby="example-modal-sizes-title-sm"
+            >
                 <Modal.Header closeButton>
                     <Modal.Title id="example-modal-sizes-title-sm">
                         환영합니다~
